@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>UEFA Champions League</title>
+
+    <meta name="description" content="Site officiel de la Ligue des Champions UEFA : résultats, équipes et actualités.">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0a1628 0%, #1a2f4d 100%);
+            color: #ffffff;
+        }
+
+        :focus-visible {
+            outline: 4px solid #00b4ff;
+            outline-offset: 4px;
+        }
+
+        .sr-only {
+            position: absolute;
+            left: -10000px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+
+        nav {
+            background: rgba(0,0,0,0.9);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        nav a:hover,
+        nav a:focus {
+            color: #00b4ff;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #00b4ff;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .card:hover,
+        .card:focus-within {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,180,255,0.3);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-content h3 {
+            color: #00b4ff;
+            margin-bottom: 1rem;
+        }
+
+        .card-content p {
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .card-content button {
+            cursor: pointer;
+        }
+
+        header.hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            min-height: 500px;
+            background:
+                linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.7)),
+                url("https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1200")
+                center / cover no-repeat;
+        }
+
+        header.hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        header.hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+        }
+
+        button {
+            padding: 1rem 2.2rem;
+            border-radius: 50px;
+            border: none;
+            background: linear-gradient(45deg,#00b4ff,#0077ff);
+            color: #fff;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin: .5rem;
+        }
+
+        button:hover,
+        button:focus {
+            background: #009dff;
+        }
+
+        .menu-toggle {
+            position: fixed;
+            top: 120px;
+            right: 20px;
+            z-index: 1100;
+        }
+
+        aside {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 300px;
+            height: 100vh;
+            background: #000;
+            padding: 2rem;
+            transition: right .3s;
+        }
+
+        aside.active {
+            right: 0;
+        }
+
+        aside h2 {
+            color: #00b4ff;
+            margin-bottom: 1.5rem;
+        }
+
+        aside ul {
+            list-style: none;
+        }
+
+        aside li {
+            margin: 1rem 0;
+        }
+
+        aside a {
+            color: #fff;
+            text-decoration: none;
+            display: block;
+            padding: .6rem;
+        }
+
+        aside a:hover,
+        aside a:focus {
+            color: #00b4ff;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: auto;
+            padding: 3rem 2rem;
+        }
+
+        section {
+            margin-bottom: 4rem;
+        }
+
+        section h2 {
+            text-align: center;
+            color: #00b4ff;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .carousel-container {
+            max-width: 900px;
+            margin: auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .carousel {
+            display: flex;
+            transition: transform .5s ease-in-out;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            padding: 3rem;
+            text-align: center;
+            background: rgba(255,255,255,.05);
+        }
+
+        .carousel-slide h3 {
+            font-size: 2rem;
+            color: #00b4ff;
+            margin-bottom: .5rem;
+        }
+
+        .carousel-controls button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .prev { left: 10px; }
+        .next { right: 10px; }
+
+        form {
+            max-width: 600px;
+            margin: 2rem auto 0 auto;
+            background: rgba(255,255,255,.05);
+            padding: 2rem;
+            border-radius: 15px;
+        }
+
+        label {
+            display: block;
+            margin-top: 1rem;
+            color: #00b4ff;
+            font-weight: bold;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: .8rem;
+            margin-top: .4rem;
+            border-radius: 8px;
+            border: 2px solid #00b4ff;
+            background: rgba(255,255,255,.1);
+            color: #fff;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        footer {
+            background: #000;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+
+<body>
+
+<a href="#contenu" class="sr-only">Aller au contenu principal</a>
+
+<nav aria-label="Navigation principale">
+    <div class="logo">⚽ UEFA Champions League</div>
+    <ul>
+        <li><a href="#">Accueil</a></li>
+        <li><a href="#">Équipes</a></li>
+        <li><a href="#">Matches</a></li>
+        <li><a href="#">Actualités</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+</nav>
+
+<button
+    class="menu-toggle"
+    aria-controls="menu-lateral"
+    aria-expanded="false"
+    onclick="toggleMenu()">
+    ☰ Menu
+</button>
+
+<aside id="menu-lateral" aria-label="Menu secondaire">
+    <h2>Navigation</h2>
+    <ul>
+        <li><a href="#">Palmarès</a></li>
+        <li><a href="#">Classements</a></li>
+        <li><a href="#">Buteurs</a></li>
+        <li><a href="#">Billetterie</a></li>
+    </ul>
+</aside>
+
+<header class="hero">
+    <h1>La plus grande compétition de clubs</h1>
+    <p>Vivez l'excellence du football européen</p>
+    <button>Voir les matchs</button>
+    <button>Rejoindre</button>
+</header>
+
+<main id="contenu">
+    <section>
+        <h2>Derniers résultats</h2>
+
+        <div class="carousel-container" aria-roledescription="carrousel">
+            <div class="carousel" id="carousel">
+
+                <article class="carousel-slide">
+                    <h3>Bayern Munich 3 – 1 PSG</h3>
+                    <p>7 janvier 2026 — Allianz Arena</p>
+                </article>
+
+                <article class="carousel-slide">
+                    <h3>Real Madrid 2 – 2 Liverpool</h3>
+                    <p>6 janvier 2026 — Santiago Bernabéu</p>
+                </article>
+
+                <article class="carousel-slide">
+                    <h3>Manchester City 4 – 0 Dortmund</h3>
+                    <p>5 janvier 2026 — Etihad Stadium</p>
+                </article>
+
+            </div>
+
+            <div class="carousel-controls">
+                <button class="prev" aria-label="Match précédent" onclick="move(-1)">◀</button>
+                <button class="next" aria-label="Match suivant" onclick="move(1)">▶</button>
+            </div>
+        </div>
+    </section>
+
+    <section aria-labelledby="equipes-legendaire">
+        <h2 id="equipes-legendaire">Équipes Légendaires</h2>
+        <div class="gallery" role="list">
+            <article class="card" role="listitem" aria-label="Real Madrid, le club le plus titré de l'histoire avec 15 trophées Champions League.">
+                <img src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=400" alt="Stade du Real Madrid">
+                <div class="card-content">
+                    <h3>Real Madrid</h3>
+                    <p>Le club le plus titré de l'histoire avec 15 trophées Champions League.</p>
+                    <button>Découvrir</button>
+                </div>
+            </article>
+
+            <article class="card" role="listitem" aria-label="Bayern Munich, domination allemande avec 6 titres de Champions League.">
+                <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=400" alt="Équipe du Bayern Munich">
+                <div class="card-content">
+                    <h3>Bayern Munich</h3>
+                    <p>Domination allemande et 6 titres de Champions League.</p>
+                    <button>Découvrir</button>
+                </div>
+            </article>
+
+            <article class="card" role="listitem" aria-label="Liverpool, tradition anglaise et 6 couronnes européennes.">
+                <img src="https://images.unsplash.com/photo-1551958219-acbc608c6377?w=400" alt="Équipe de Liverpool">
+                <div class="card-content">
+                    <h3>Liverpool</h3>
+                    <p>Tradition anglaise et 6 couronnes européennes.</p>
+                    <button>Découvrir</button>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Moments Inoubliables -->
+    <section aria-labelledby="moments-inoubliables">
+        <h2 id="moments-inoubliables">Moments Inoubliables</h2>
+        <div class="gallery" role="list">
+            <article class="card" role="listitem" aria-label="Finales Épiques, revivez les plus grands moments de l'histoire de la compétition.">
+                <img src="https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?w=400" alt="Célébration d'une finale">
+                <div class="card-content">
+                    <h3>Finales Épiques</h3>
+                    <p>Revivez les plus grands moments de l'histoire de la compétition.</p>
+                    <button>Regarder</button>
+                </div>
+            </article>
+
+            <article class="card" role="listitem" aria-label="Ambiance Stade, l'atmosphère électrique des nuits européennes.">
+                <img src="https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=400" alt="Supporters dans le stade">
+                <div class="card-content">
+                    <h3>Ambiance Stade</h3>
+                    <p>L'atmosphère électrique des nuits européennes.</p>
+                    <button>Explorer</button>
+                </div>
+            </article>
+
+            <article class="card" role="listitem" aria-label="Le Trophée, le graal du football européen, convoité par tous.">
+                <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=400" alt="Trophée de la Ligue des Champions">
+                <div class="card-content">
+                    <h3>Le Trophée</h3>
+                    <p>Le graal du football européen, convoité par tous.</p>
+                    <button>Histoire</button>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Formulaire placé à la fin -->
+    <section id="contact">
+        <h2>Contactez-nous</h2>
+
+        <form>
+            <label for="name">Nom complet</label>
+            <input id="name" type="text" required>
+
+            <label for="email">Adresse email</label>
+            <input id="email" type="email" required>
+
+            <label for="message">Message</label>
+            <textarea id="message" rows="5"></textarea>
+
+            <button type="submit">Envoyer</button>
+        </form>
+    </section>
+</main>
+
+<footer>
+    <p>© 2026 UEFA Champions League — Tous droits réservés</p>
+</footer>
+
+<script>
+let index = 0;
+
+function move(direction) {
+    const slides = document.querySelectorAll(".carousel-slide");
+    index += direction;
+
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
+
+    document.getElementById("carousel").style.transform =
+        `translateX(-${index * 100}%)`;
+}
+
+function toggleMenu() {
+    const menu = document.getElementById("menu-lateral");
+    const btn = document.querySelector(".menu-toggle");
+    const open = menu.classList.toggle("active");
+    btn.setAttribute("aria-expanded", open);
+}
+</script>
+
+</body>
+</html>
